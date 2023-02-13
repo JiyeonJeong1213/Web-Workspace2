@@ -5,7 +5,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Properties;
 
 public class JDBCTemplate {
@@ -49,12 +51,59 @@ public class JDBCTemplate {
 	}
 	
 	// 2. 전달받은 Connection객체를 가지고 commit해주는 메소드
+	public static void commit(Connection conn) {
+		
+		try {
+			if(conn!=null && !conn.isClosed()) {
+				conn.commit();
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 	
 	// 3. 전달받은 Connection객체를 가지고 rollback해주는 메소드
+	public static void rollback(Connection conn) {
+		try {
+			if(conn!=null && !conn.isClosed()) {
+				conn.rollback();
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 	
 	// 4. Connection객체를 반납해주는 메소드
+	public static void close(Connection conn) {
+		try {
+			if(conn!=null && !conn.isClosed()) {
+				conn.close();
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 	
 	// 5. Statement객체를 반납시켜주는 메소드
+	public static void close(Statement stmt) { 
+		// -> 다형성으로 인해 preparedStatement객체를 매개변수로 받아줄 수 있다.
+		try {
+			if(stmt!=null && !stmt.isClosed()) {
+				stmt.close();
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 	
 	// 6. ResultSet객체를 반납시켜주는 메소드
+	public static void close(ResultSet rset) {
+		try {
+			if(rset!=null && !rset.isClosed()) {
+				rset.close();
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 }

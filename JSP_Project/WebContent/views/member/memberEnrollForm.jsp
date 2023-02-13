@@ -6,13 +6,6 @@
 <meta charset="UTF-8">
 <title>회원가입 폼</title>
 <style>
-	.outer {
-		background: black;
-		color: white;
-		width: 1000px;
-		margin: auto;
-		margin-top: 50px;
-	}
 	#enroll-form table {margin: auto;}
 	#enroll-form input {margin: 5px;}
 </style>
@@ -30,7 +23,7 @@
                 <tr>
                     <td>* 아이디</td>
                     <td><input type="text" name="userId" maxlength="12" required></td>
-                    <td><button type="button" onclick="idCheck();">중복확인</button></td>
+                    <td><button type="button" onclick="idCheck();">중복확인</button></td> 
                 </tr>
                 <tr>
                     <td>* 비밀번호</td>
