@@ -158,4 +158,45 @@ public class MemberDao {
 		}
 		return m;
 	}
+	
+	public int updatePwdMember(Connection conn, String userId, String userPwd, String updatePwd) {
+		int result = 0;
+		PreparedStatement pstmt = null;
+		String sql = prop.getProperty("updatePwdMember");
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setString(1, updatePwd);
+			pstmt.setString(2, userId);
+			pstmt.setString(3, userPwd);
+			
+			result = pstmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			JDBCTemplate.close(pstmt);
+		}
+		return result;
+	}
+	
+	public int deleteMember(Connection conn, String userId, String userPwd) {
+		int result = 0;
+		PreparedStatement pstmt = null;
+		String sql = prop.getProperty("deleteMember");
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setString(1, userId);
+			pstmt.setString(2, userPwd);
+			
+			result = pstmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			JDBCTemplate.close(pstmt);
+		}
+		return result;
+	}
 }

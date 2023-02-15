@@ -66,4 +66,39 @@ public class MemberService {
 		
 		return updateMem;
 	}
+	
+	public Member updatePwdMember(String userId, String userPwd, String updatePwd) {
+		
+		Connection conn = JDBCTemplate.getConnection();
+		
+		int result = new MemberDao().updatePwdMember(conn, userId, userPwd, updatePwd);
+		
+		Member updateMem = null;
+		
+		if(result>0) { // 성공
+			JDBCTemplate.commit(conn);
+			
+			updateMem = new MemberDao().selectMember(conn, userId);
+		}else { // 실패
+			JDBCTemplate.rollback(conn);
+		}
+		JDBCTemplate.close(conn);
+		
+		return updateMem;
+	}
+	
+	public int deleteMember(String userPwd, String userId) {
+		
+		Connection conn = JDBCTemplate.getConnection();
+		
+		int result = new MemberDao().deleteMember(conn, userId, userPwd);
+		
+		if(result>0) {
+			JDBCTemplate.commit(conn);
+		}else {
+			JDBCTemplate.rollback(conn);
+		}
+		JDBCTemplate.close(conn);
+		return result;
+	}
 }

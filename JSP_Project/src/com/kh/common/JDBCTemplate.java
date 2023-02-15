@@ -12,6 +12,7 @@ import java.util.Properties;
 
 public class JDBCTemplate {
 	// 자바에서 DB와 연결하기 위해서
+	
 	// 1. Connection객체 생성 후 해당 Connection반환하는 메소드
 	public static Connection getConnection() {
 		

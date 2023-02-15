@@ -1,23 +1,28 @@
-package com.kh.member.controller;
+package com.kh.notice.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.kh.notice.model.service.NoticeService;
+import com.kh.notice.model.vo.Notice;
+
 /**
- * Servlet implementation class LogoutController
+ * Servlet implementation class NoticeListController
  */
-@WebServlet("/logout.me")
-public class LogoutController extends HttpServlet {
+@WebServlet("/list.no")
+public class NoticeListController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public LogoutController() {
+    public NoticeListController() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -27,13 +32,15 @@ public class LogoutController extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		// 로그아웃 요청 처리 => 연동 되어있던 loginUser 세션 정보를 만료시키기 (세션 무효화)
-		 request.getSession().removeAttribute("loginUser");
-		//request.getSession().invalidate(); // session영역에 있는 모든 데이터를 날리는 함수
+		// 1) 공지사항 전체 리스트 조회
+		ArrayList<Notice> list = new NoticeService().selectNoticeLIst();
+		// SELECT * FROM NOTICE WHERE STATUS='Y'
 		
-		// 응답페이지 => /jspproject
-		// url재요청방식
-		response.sendRedirect(request.getContextPath()); // /jspproject
+		
+		// 2) 조회결과를 담아서 응답페이지로 포워딩
+		request.setAttribute("list", list);
+		
+		request.getRequestDispatcher("views/notice/noticeListView.jsp").forward(request, response);
 	}
 
 	/**
