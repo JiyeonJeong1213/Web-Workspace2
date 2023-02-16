@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.kh.notice.model.service.NoticeService;
-import com.kh.notice.model.vo.Notice;
+//import com.kh.notice.model.vo.Notice;
 
 /**
  * Servlet implementation class NoticeUpdateController
