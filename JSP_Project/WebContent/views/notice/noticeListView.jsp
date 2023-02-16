@@ -84,10 +84,10 @@
 	</div>
 	<script>
 		function moveNotice(nno) {
-			location.href = "<%= contextPath %>/detail.no?nno"+nno;
+			<%-- location.href = "<%= contextPath %>/detail.no?nno="+nno; --%>
 		}
 		
-	<%-- 	$(function(){
+	 	$(function(){
 			
 			$(".list-area>tbody>tr").click(function(){
 				
@@ -101,7 +101,7 @@
 				location.href = "<%= contextPath %>/detail.no?nno="+nno;
 			});
 		});
- --%>		
+		
 	
 	
 	</script>

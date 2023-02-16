@@ -13,4 +13,52 @@
 		ORDER BY CREATE_DATE DESC
 	</entry>
 	
+	<entry key="increaseCount">
+		UPDATE NOTICE
+		SET COUNT = COUNT+1
+		WHERE NOTICE_NO = ?
+		  AND STATUS = 'Y'
+	</entry>
+	
+	<entry key="selectNotice">
+		SELECT NOTICE_NO,
+			   NOTICE_TITLE,
+			   NOTICE_CONTENT,
+			   USER_ID,
+			   CREATE_DATE
+		FROM NOTICE N
+		JOIN MEMBER M ON(NOTICE_WRITER = USER_NO)
+		WHERE NOTICE_NO = ?
+		  AND N.STATUS = 'Y'
+	</entry>
+	
+	<entry key="insertNotice">
+		INSERT INTO NOTICE
+		(
+			NOTICE_NO,
+			NOTICE_TITLE,
+			NOTICE_CONTENT,
+			NOTICE_WRITER
+		)
+		VALUES
+		(
+			SEQ_NNO.NEXTVAL,
+			?,
+			?,
+			?
+		)
+	</entry>
+	
+	<entry key="selectNoticeNo">
+		SELECT SEQ_NNO.CURRVAL AS NOTICE_NO
+		FROM DUAL
+	</entry>
+	
+	<entry key="updateNotice">
+		UPDATE NOTICE
+		SET NOTICE_TITLE = ?,
+			NOTICE_CONTENT = ?
+		WHERE NOTICE_NO = ?
+		  AND STATUS = 'Y'
+	</entry>
 </properties>
