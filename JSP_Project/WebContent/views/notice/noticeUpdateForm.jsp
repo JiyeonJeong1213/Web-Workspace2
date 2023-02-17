@@ -24,7 +24,7 @@
 		<h2 align="center">공지사항 수정</h2>
 		<br>
 		
-		<form id="update-form" action="<%= contextPath %>/update.no" methond="post">
+		<form id="update-form" action="<%= contextPath %>/update.no" method="post">
 			<input type="hidden" name="nno" value="<%= n.getNoticeNO() %>">
 			<table align="center">
 				<tr>
