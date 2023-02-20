@@ -45,7 +45,7 @@
 			<% if(loginUser != null && loginUser.getUserId().equals(n.getNoticeWriter())) { %>
 				<!-- 현재 로그인을 한 사용자가 해당 글을 작성한 작성자일 경우에만 보여지도록 컨트롤 -->
 				<a href="<%= contextPath %>/updateForm.no?nno=<%= n.getNoticeNO() %>" class="btn btn-warning btn-sm">수정</a>
-				<a href="<%= contextPath %>/deleteForm.no?nno=<%= n.getNoticeNO() %>" class="btn btn-danger btn-sm">삭제</a>
+				<a href="<%= contextPath %>/delete.no?nno=<%= n.getNoticeNO() %>" class="btn btn-danger btn-sm">삭제</a>
 			<% } %>
 		</div>
 	</div>

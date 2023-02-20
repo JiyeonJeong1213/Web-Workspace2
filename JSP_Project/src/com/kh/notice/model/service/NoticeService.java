@@ -78,9 +78,10 @@ public class NoticeService {
 		return result;
 	}
 	
-	public int deleteNotice(int nno) {
+	public int deleteNotice2(int nno) {
 		Connection conn = getConnection();
-		int result = new NoticeDao().deleteNotice(conn, nno);
+		
+		int result = new NoticeDao().deleteNotice2(conn, nno);
 		
 		if(result>0) {
 			commit(conn);
@@ -88,6 +89,7 @@ public class NoticeService {
 			rollback(conn);
 		}
 		close(conn);
+		
 		return result;
 	}
 }

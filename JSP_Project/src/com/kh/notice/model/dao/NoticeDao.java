@@ -178,7 +178,7 @@ public class NoticeDao {
 		return result;
 	}
 	
-	public int deleteNotice(Connection conn, int nno) {
+	public int deleteNotice2(Connection conn, int nno) {
 		int result = 0;
 		PreparedStatement pstmt = null;
 		String sql = prop.getProperty("deleteNotice");
