@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.kh.board.model.service.BoardService;
+import com.kh.board.model.vo.Attachment;
 import com.kh.board.model.vo.Board;
 
 /**
@@ -37,6 +38,8 @@ public class BoardDetailController extends HttpServlet {
 		if(result>0) {
 			Board b = new BoardService().selectBoard(bno);
 			request.setAttribute("b", b);
+			Attachment at = new BoardService().selectAttachment(bno);
+			request.setAttribute("at", at);
 			
 			request.getRequestDispatcher("views/board/boardDetailView.jsp").forward(request, response);
 		}else {

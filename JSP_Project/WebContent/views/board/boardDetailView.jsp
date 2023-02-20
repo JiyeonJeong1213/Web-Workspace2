@@ -1,5 +1,10 @@
+<%@ page import="com.kh.board.model.vo.Board, com.kh.board.model.vo.Attachment" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<% 
+	Board b = (Board)request.getAttribute("b"); 
+	Attachment at = (Attachment)request.getAttribute("at");
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -21,29 +26,32 @@
 		<table id="detail-area" align="center" border="1">
 			<tr>
 				<th width="70">카테고리</th>
-				<th width="70">운동</th>
+				<th width="70"><%= b.getCategory() %></th>
 				<th width="70">제목</th>
-				<td width="350">제목부분입니다</td>
+				<td width="350"><%= b.getBoardTitle() %></td>
 			</tr>
 			<tr>
 				<th>작성자</th>
-				<td>user01</td>
+				<td><%= b.getBoardWriter() %></td>
 				<th>작성일</th>
-				<td>2023-02-20</td>
+				<td><%= b.getCreateDate() %></td>
 			</tr>
 			<tr>
 				<th>내용</th>
 				<td colspan="3">
-					<p style="height:200px">글내용글내용글내용</p>
+					<p style="height:200px"><%= b.getBoardContent() %></p>
 				</td>
 			</tr>
 			<tr>
 				<th>첨부파일</th>
 				<td colspan="3">
 					<!-- 첨부파일이 없을 경우 : 첨부파일이 없습니다. -->
-					
+					<% if(at == null) { %>
+						첨부파일이 없습니다.
+					<% }else { %>
 					<!-- 첨부파일이 있을 경우 : -->
-					<a download="파일원본명" href="해당파일이존재하는경로">파일원본명</a>
+						<a download="<%= at.getOriginName() %>" href="<%= contextPath %>/<%= at.getFilePath() %><%= at.getChangeName() %>"><%= at.getOriginName() %></a>
+					<% } %>
 				</td>
 			</tr>
 		</table>

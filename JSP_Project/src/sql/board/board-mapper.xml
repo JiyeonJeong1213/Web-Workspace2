@@ -60,4 +60,10 @@
 		WHERE BOARD_NO = ?
 		  AND B.STATUS = 'Y'
 	</entry>
+	
+	<entry key="selectAttachment">
+		SELECT ORIGIN_NAME, CHANGE_NAME, FILE_PATH
+		FROM ATTACHMENT
+		WHERE REF_BNO = ?
+	</entry>
 </properties>

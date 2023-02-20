@@ -85,4 +85,11 @@ public class BoardService {
 		close(conn);
 		return b;
 	}
+	public Attachment selectAttachment(int bno) {
+		Connection conn = getConnection();
+		Attachment at = new BoardDao().selectAttachment(conn, bno);
+		close(conn);
+		return at;
+	}
+	
 }

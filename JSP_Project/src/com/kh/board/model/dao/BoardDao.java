@@ -195,7 +195,9 @@ public class BoardDao {
 			
 			rset = pstmt.executeQuery();
 			if(rset.next()) {
-				b = new Board (bno, rset.getString("CATEGORY_NAME"), rset.getString("BOARD_TITLE"), rset.getString("BOARD_CONTENT"), rset.getString("USER_ID"), rset.getDate("CREATE_DATE"));
+				b = new Board (bno, rset.getString("CATEGORY_NAME"), 
+						rset.getString("BOARD_TITLE"), rset.getString("BOARD_CONTENT"), 
+						rset.getString("USER_ID"), rset.getDate("CREATE_DATE"));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -204,5 +206,30 @@ public class BoardDao {
 			close(pstmt);
 		}
 		return b;
+	}
+	public Attachment selectAttachment(Connection conn, int bno) {
+		Attachment at = null;
+		PreparedStatement pstmt = null;
+		String sql = prop.getProperty("selectAttachment");
+		ResultSet rset = null;
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, bno);
+			
+			rset = pstmt.executeQuery();
+			if(rset.next()) {
+				at = new Attachment();
+				at.setOriginName(rset.getString("ORIGIN_NAME"));
+				at.setChangeName(rset.getString("CHANGE_NAME"));
+				at.setFilePath(rset.getString("FILE_PATH"));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			close(rset);
+			close(pstmt);
+		}
+		return at;
 	}
 }
