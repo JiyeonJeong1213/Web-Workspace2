@@ -1,6 +1,7 @@
 package com.kh.notice.controller;
 
 import java.io.IOException;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -9,19 +10,18 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.kh.notice.model.service.NoticeService;
-//import com.kh.notice.model.vo.Notice;
 
 /**
- * Servlet implementation class NoticeUpdateController
+ * Servlet implementation class NoticeDeleteController
  */
-@WebServlet("/update.no")
-public class NoticeUpdateController extends HttpServlet {
+@WebServlet("/deleteForm.no")
+public class NoticeDeleteController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public NoticeUpdateController() {
+    public NoticeDeleteController() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -31,19 +31,15 @@ public class NoticeUpdateController extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		int nno = Integer.parseInt(request.getParameter("nno"));
-		String title = request.getParameter("title");
-		String content = request.getParameter("content");
+		int result = new NoticeService().deleteNotice(nno);
 		
-		int result = new NoticeService().updateNotice(nno, title, content);
-		
-		if(result <= 0) {
-			request.setAttribute("errorMsg", "공지사항 수정에 실패했습니다.");
-			request.getRequestDispatcher("views/common/errorPage").forward(request, response);
-		}else {
+		if(result>0) {
 			HttpSession session = request.getSession();
-			session.setAttribute("alertMsg", "공지사항이 수정되었습니다.");
-			
-			response.sendRedirect(request.getContextPath()+"/detail.no?nno="+ nno);
+			session.setAttribute("alertMsg", "공지사항이 삭제되었습니다.");
+			response.sendRedirect(request.getContextPath()+"/list.no");
+		}else {
+			request.setAttribute("errorMsg", "공지사항 삭제에 실패했습니다.");
+			request.getRequestDispatcher("views/common/errorPage").forward(request, response);
 		}
 	}
 
@@ -51,9 +47,8 @@ public class NoticeUpdateController extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		request.setCharacterEncoding("UTF-8");
-		
-		
+		// TODO Auto-generated method stub
+		doGet(request, response);
 	}
 
 }
