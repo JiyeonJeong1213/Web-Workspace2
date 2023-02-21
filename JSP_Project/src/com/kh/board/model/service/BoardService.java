@@ -67,7 +67,6 @@ public class BoardService {
 	
 	public int increaseCount(int bno) {
 		Connection conn = getConnection();
-		
 		int result = new BoardDao().increaseCount(conn, bno);
 		
 		if(result>0) {
@@ -78,7 +77,6 @@ public class BoardService {
 		close(conn);
 		return result;
 	}
-	
 	public Board selectBoard(int bno) {
 		Connection conn = getConnection();
 		Board b = new BoardDao().selectBoard(conn, bno);
@@ -92,4 +90,39 @@ public class BoardService {
 		return at;
 	}
 	
+	public int updateBoard(Board b, Attachment at) {
+		Connection conn = getConnection();
+		int result1 = new BoardDao().updateBoard(conn, b);
+		
+		int result2 = 1;
+		if(at != null) {
+			if(at.getRefBno()!=0) {
+				result2 = new BoardDao().updateAttachmentInsert(conn, at);
+			}else {
+				result2 = new BoardDao().updateAttachment(conn, at);
+			}
+		}
+		
+		if(result1>0 && result2>0) {
+			commit(conn);
+		}else {
+			rollback(conn);
+		}
+		close(conn);
+		return result1 * result2;
+	}
+	
+	public int deleteBoard(int bno) {
+		Connection conn = getConnection();
+		int result = new BoardDao().deleteBoard(conn, bno);
+		//int result2 = new BoardDao().deleteAttachment(conn, bno);
+		
+		if(result>0) {
+			commit(conn);
+		}else {
+			rollback(conn);
+		}
+		close(conn);
+		return result;
+	}
 }

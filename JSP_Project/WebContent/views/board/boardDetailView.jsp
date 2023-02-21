@@ -50,7 +50,8 @@
 						첨부파일이 없습니다.
 					<% }else { %>
 					<!-- 첨부파일이 있을 경우 : -->
-						<a download="<%= at.getOriginName() %>" href="<%= contextPath %>/<%= at.getFilePath() %><%= at.getChangeName() %>"><%= at.getOriginName() %></a>
+						<!-- href='/jspproject/resources/board_upfiles/2023xxxx.jpg -->
+						<a download="<%= at.getOriginName() %>" href="<%= contextPath %>/<%= at.getFilePath()+at.getChangeName() %>"><%= at.getOriginName() %></a>
 					<% } %>
 				</td>
 			</tr>
@@ -62,10 +63,10 @@
 			<a href="<%= contextPath %>/list.bo?currentPage=1" class="btn btn-secondary btn-sm">목록가기</a>
 			
 			<!-- 로그인한 사용자가 해당 게시글의 작성자인 경우 -->
-			<%-- <% if(loginUser != null && loginUser.getUserId().equals(b.getBoardWriter())){ %>
-				<a href="<%= contextPath %>/updateForm.bo?bno=<%= b.getBoardNo() %>" class="btn btn-warning btn-sm">수정하기</a>
+			<% if(loginUser != null && loginUser.getUserId().equals(b.getBoardWriter())){ %>
+				<a href="<%= contextPath %>/update.bo?bno=<%= b.getBoardNo() %>" class="btn btn-warning btn-sm">수정하기</a>
 				<a href="<%= contextPath %>/delete.bo?bno=<%= b.getBoardNo() %>" class="btn btn-danger btn-sm">삭제하기</a>
-			<% } %> --%>
+			<% } %>
 		</div>
 		
 		<br>

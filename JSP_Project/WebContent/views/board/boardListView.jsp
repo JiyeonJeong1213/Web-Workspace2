@@ -70,52 +70,24 @@
 						</tr>
 					<% } %>
 				<% } %>
-				<!-- <tr>
-					<td>10</td>
-					<td>운동</td>
-					<td>제목</td>
-					<td>user01</td>
-					<td>100</td>
-					<td>2023-02-17</td>
-				</tr>
-				<tr>
-					<td>11</td>
-					<td>운동</td>
-					<td>제목</td>
-					<td>user01</td>
-					<td>100</td>
-					<td>2023-02-17</td>
-				</tr>
-				<tr>
-					<td>12</td>
-					<td>운동</td>
-					<td>제목</td>
-					<td>user01</td>
-					<td>100</td>
-					<td>2023-02-17</td>
-				</tr>
-				<tr>
-					<td>13</td>
-					<td>운동</td>
-					<td>제목</td>
-					<td>user01</td>
-					<td>100</td>
-					<td>2023-02-17</td>
-				</tr> -->
 			</tbody>
 		</table>
 		<script>
 		
 			$(function() {
 				$(".list-area>tbody>tr").click(function(){
+					// 클릭시 해당 게시글의 글 번호를 알아와야 함
 					let bno = $(this).children().eq(0).text();
+					// 현재 내가 클릭한 tr의 자손들 중 0번째에 위치한 자식의 textNode값을 가져옴
 					
+					// get방식 요청시 요청할 url?키=밸류&키=밸류 식스로 파라메터 넘겨줄 수 있음
+					// 물음표 뒤의 내용 : 쿼리스트링 => 직접 만들어서 넘겨줘야 함
 					location.href="<%= contextPath %>/detail.bo?bno="+bno;
 				});
-				
 			});
 			
 		</script>
+		
 		<br><br>
 		
 		<!-- 페이징바 영역 -->

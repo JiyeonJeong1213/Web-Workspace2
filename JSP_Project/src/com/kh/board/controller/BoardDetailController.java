@@ -33,6 +33,8 @@ public class BoardDetailController extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		int bno = Integer.parseInt(request.getParameter("bno"));
 		
+		// 조회수 증가 / 게시글 조회(Board) / 첨부파일 조회(Attachment)
+		
 		int result = new BoardService().increaseCount(bno);
 		
 		if(result>0) {
@@ -43,8 +45,8 @@ public class BoardDetailController extends HttpServlet {
 			
 			request.getRequestDispatcher("views/board/boardDetailView.jsp").forward(request, response);
 		}else {
-			request.setAttribute("errorMsg", "일반게시판 조회에 실패했습니다.");
-			request.getRequestDispatcher("view/common/errorPage.jsp").forward(request, response);
+			request.setAttribute("errorMsg", "게시글 조회에 실패했습니다.");
+			request.getRequestDispatcher("views/common/errorPage.jsp").forward(request, response);
 		}
 	}
 
