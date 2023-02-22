@@ -67,6 +67,7 @@ public class BoardUpdateController extends HttpServlet {
 			MultipartRequest multi = new MultipartRequest(request, savePath, maxSize, "UTF-8", new MyFileRenamePolicy());
 			
 			// 3. 본격적으로 sql문 실행시 필요한 값들 셋팅
+			// - BOARD테이블에 UPDATE시 필요한 값들 셋
 			Board b = new Board();
 			b.setBoardNo(Integer.parseInt(multi.getParameter("bno")));
 			b.setCategory(multi.getParameter("category"));
@@ -86,7 +87,7 @@ public class BoardUpdateController extends HttpServlet {
 					// 기존의 파일번호를 저장시키기
 					at.setFileNo(Integer.parseInt(multi.getParameter("originFileNo")));
 					// 기존의 첨부파일 삭제 
-					new File(savePath+at.getChangeName()).delete();
+					new File(savePath+multi.getParameter("changeFileName")).delete();
 				}else { // 기존에 첨부파일이 없는 경우
 					// Attachment테이블에 정보를 INSERT
 					
@@ -94,26 +95,23 @@ public class BoardUpdateController extends HttpServlet {
 					at.setRefBno(Integer.parseInt(multi.getParameter("bno")));
 				}
 			}
+			
+			// 하나의 트랜잭션으로 Board의 UPDATE문과 Attachment테이블의 INSERT, UPDATE문 동시에 처리해주기
 			int result = new BoardService().updateBoard(b,at);
 			
-			if(result>0) {
+			if(result>0) { // 수정 성공시 : 상세조회페이지로 redirect
 				request.getSession().setAttribute("alertMsg", "게시글이 수정되었습니다.");
 				response.sendRedirect(request.getContextPath()+"/detail.bo?bno="+multi.getParameter("bno"));
-			}else {
+			}else { // 수정 실패시 : errorPage
 				request.setAttribute("errorMsg", "게시글 수정 실패");
 				request.getRequestDispatcher("views/common/errorPage.jsp").forward(request, response);
 			}
-			
-			// 하나의 트랜잭션으로 Board의 UPDATE문과 Attachment테이블의 INSERT, UPDATE문 동시에 처리해주기
 			
 			// 항상 Board테이블에 UPDATE문은 반드시 실행시켜줘야 함
 			// case1 : 새로운 첨부파일이 없는 경우 -> INSERT(X), UPDATE(X)
 			// case2 : 새로운 첨부파일이 있는 경우, 기존에도 첨부파일이 있던 경우 -> UPDATE(O), INSERT(X)
 			// case3 : 새로운 첨부파일이 있는데 기존에는 첨부파일이 없던 경우 -> UPDATE(X), INSERT(O)
 			
-			// 수정 성공시 : 상세조회페이지로 redirect
-			
-			// 수정 실패시 : errorPage
 		}else {
 			request.setAttribute("errorMsg", "전송방식이 잘못되었습니다.");
 			request.getRequestDispatcher("views/common/errorPage.jsp").forward(request, response);

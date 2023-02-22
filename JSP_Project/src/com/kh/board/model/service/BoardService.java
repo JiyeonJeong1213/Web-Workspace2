@@ -94,12 +94,12 @@ public class BoardService {
 		Connection conn = getConnection();
 		int result1 = new BoardDao().updateBoard(conn, b);
 		
-		int result2 = 1;
+		int result2 = 1; // 애초에 insert나 update문이 실행되지 않을 경우를 대비해서 1로 초기화해줌
 		if(at != null) {
-			if(at.getRefBno()!=0) {
-				result2 = new BoardDao().updateAttachmentInsert(conn, at);
-			}else {
+			if(at.getFileNo() !=0) { // 기존에 첨부파일이 있었을 경우
 				result2 = new BoardDao().updateAttachment(conn, at);
+			}else { // 기존에 첨부파일이 없었을 경우
+				result2 = new BoardDao().updateAttachmentInsert(conn, at);
 			}
 		}
 		
@@ -112,17 +112,34 @@ public class BoardService {
 		return result1 * result2;
 	}
 	
-	public int deleteBoard(int bno) {
+	public int deleteBoard(int bno, int userNo, Attachment at) {
 		Connection conn = getConnection();
-		int result = new BoardDao().deleteBoard(conn, bno);
-		//int result2 = new BoardDao().deleteAttachment(conn, bno);
+		int result1 = new BoardDao().deleteBoard(conn, bno, userNo);
+		int result2 = 1;
+		if(at != null) {
+			result2 = new BoardDao().deleteAttachment(conn, bno);
+		}
 		
-		if(result>0) {
+		if(result1>0 && result2>0) {
 			commit(conn);
 		}else {
 			rollback(conn);
 		}
 		close(conn);
-		return result;
+		return result1*result2;
+	}
+	
+	public int insertThumbnailBoard(Board b, ArrayList<Attachment> list) {
+		Connection conn = getConnection();
+		int result1 = new BoardDao().insertThumbnailBoard(conn, b);
+		int result2 = new BoardDao().insertAttachmentLIst(conn, list);
+		
+		if(result1>0 && result2>0) {
+			commit(conn);
+		}else {
+			rollback(conn);
+		}
+		close(conn);
+		return result1*result2;
 	}
 }

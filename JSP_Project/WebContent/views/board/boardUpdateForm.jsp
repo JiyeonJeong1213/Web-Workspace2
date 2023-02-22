@@ -41,13 +41,29 @@
 					<td width="500">
 						<select name="category">
 							<% for(Category c : list) { %>
-								<option value="<%= c.getCategoryNo() %>"><%= c.getCategoryName() %></option>
+								<option value="<%= c.getCategoryNo() %>"
+								<% if(c.getCategoryName().equals(b.getCategory())){ %>
+									selected = "selected"
+								<% } %>
+								><%= c.getCategoryName() %></option>
 							<% } %>
 							
 							<!-- 내가 선택한 카테고리가 자동으로 선택되어 있도록 작업 -->
-							
-							
 						</select>
+						
+						<script>
+							$(function(){
+								$("#update-form option").each(function(){
+									/* 현재 반복을 진행중인 option태그의 text값과
+									   DB에서 가져온 categoryname값이 일치하는 경우 선택되도록*/
+									if($(this).text() == "<%= b.getCategory() %>"){
+										// 일치하는 경우에만 option태그를 선택 상태로 변경
+										$(this).attr("selected", true);
+									}
+								});
+							});
+						</script>
+						
 					</td>
 				</tr>
 				<tr>
