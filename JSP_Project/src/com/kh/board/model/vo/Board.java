@@ -14,6 +14,8 @@ public class Board {
 	private String status;		//	STATUS
 	
 	private String titleImg;
+	
+	private Attachment at;
 
 	public Board() {
 		super();
@@ -51,6 +53,12 @@ public class Board {
 		this.createDate = createDate;
 	}
 	
+	public Attachment getAt() {
+		return at;
+	}
+	public void setAt(Attachment at) {
+		this.at = at;
+	}
 	public int getBoardNo() {
 		return boardNo;
 	}

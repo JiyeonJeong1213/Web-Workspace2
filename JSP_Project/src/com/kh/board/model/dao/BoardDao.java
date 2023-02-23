@@ -279,6 +279,8 @@ public class BoardDao {
 		int result = 0;
 		PreparedStatement pstmt = null;
 		String sql = prop.getProperty("updateAttachmentInsert");
+		String sql2 = prop.getProperty("insertAttachment2");
+		sql2.replace("$", "?");
 		
 		try {
 			pstmt = conn.prepareStatement(sql);
@@ -374,5 +376,64 @@ public class BoardDao {
 			close(pstmt);
 		}
 		return result;
+	}
+	
+	public ArrayList<Board> selectThumbnailBoardList(Connection conn){
+		ArrayList<Board> bList = new ArrayList<>();
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+		String sql = prop.getProperty("selectThumbnailBoardList");
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			
+			rset = pstmt.executeQuery();
+			while(rset.next()) {
+				Board b = new Board();
+				b.setBoardNo(rset.getInt("BOARD_NO"));
+				b.setBoardTitle(rset.getString("BOARD_TITLE"));
+				b.setCount(rset.getInt("COUNT"));
+				b.setTitleImg(rset.getString("FILE_PATH")+rset.getString("CHANGE_NAME"));
+				
+				Attachment at = new Attachment();
+				at.setFilePath(rset.getString("FILE_PATH"));
+				at.setChangeName(rset.getString("CHANGE_NAME"));
+				b.setAt(at);
+				bList.add(b);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			close(rset);
+			close(pstmt);
+		}
+		return bList;
+	}
+	
+	public ArrayList<Attachment> selectAttachmentList(Connection conn, int bno) {
+		ArrayList<Attachment> list = new ArrayList<>();
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+		String sql = prop.getProperty("selectAttachment");
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, bno);
+			
+			rset = pstmt.executeQuery();
+			while(rset.next()) {
+				Attachment at = new Attachment();
+				at.setFilePath(rset.getString("FILE_PATH"));
+				at.setChangeName(rset.getString("CHANGE_NAME"));
+				
+				list.add(at);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close(rset);
+			close(conn);
+		}
+		return list;
 	}
 }
