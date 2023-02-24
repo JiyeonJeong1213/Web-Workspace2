@@ -1,3 +1,4 @@
+<%@ page import = "com.kh.common.AEScryptor" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -20,6 +21,7 @@
 		String userName = loginUser.getUserName();
 		String phone = loginUser.getPhone();
 		String email = loginUser.getEmail();
+		email = AEScryptor.decrypt(email);
 		String address = loginUser.getAddress();
 		String interest = loginUser.getInterest();
 	%>
