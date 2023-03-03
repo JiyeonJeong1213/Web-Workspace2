@@ -1,8 +1,6 @@
-package com.kh.ajaxController;
+package com.kh.member.controller;
 
 import java.io.IOException;
-import java.io.PrintWriter;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -10,16 +8,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Servlet implementation class JsAjaxController
+ * Servlet implementation class LogoutController
  */
-@WebServlet("/ajaxTest.do")
-public class JsAjaxController extends HttpServlet {
+@WebServlet("/logout.me")
+public class LogoutController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public JsAjaxController() {
+    public LogoutController() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -28,19 +26,21 @@ public class JsAjaxController extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String userId = request.getParameter("id");
-		String name = request.getParameter("name");
 		
-		response.setCharacterEncoding("UTF-8");
-		PrintWriter out = response.getWriter();
-		out.print("ajax요청에 대한 응답 결과 : "+userId+name);
+		// 로그아웃 요청 처리 => 연동 되어있던 loginUser 세션 정보를 만료시키기 (세션 무효화)
+		 request.getSession().removeAttribute("loginUser");
+		//request.getSession().invalidate(); // session영역에 있는 모든 데이터를 날리는 함수
+		
+		// 응답페이지 => /jspproject
+		// url재요청방식
+		response.sendRedirect(request.getContextPath()); // /jspproject
 	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		request.setCharacterEncoding("UTF-8");
+		// TODO Auto-generated method stub
 		doGet(request, response);
 	}
 

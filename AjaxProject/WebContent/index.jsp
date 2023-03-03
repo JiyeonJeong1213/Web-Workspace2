@@ -107,7 +107,7 @@
 			// url에 데이터 내용을 작성하지 않고, send함수의 매개변수로 작성해야 함
 			// 전송방식도 수정해줘야 함
 			xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-			xhr.send("id=user01");
+			xhr.send("id=user01&name=지연"); // 여러개 보내려면 어떻게?
 		}
 	</script>
 	
@@ -237,6 +237,207 @@
 					console.log("통신실패");
 				}
 			});
+		}
+	</script>
+	
+	<h3>3. 서버로 데이터 전송 후 조회된 객체를 응답데이터로 받기</h3>
+	회원번호 입력 : <input type="number" id="input3">
+	<button onclick="test3();">조회</button>
+	<div id="output3"></div>
+	
+	<script>
+		function test3(){
+			$.ajax({
+				url : "jqAjax3.do",
+				data : {no : $("#input3").val()},
+				success : (result) => {
+					console.log(result);
+					
+					let resultStr = "회원번호 : "+result.userNo+"<br>"
+									+"이름 : "+result.userName+"<br>"
+									+"아이디 : "+result["userId"]+"<br>"
+									+"주소 : "+result["address"]
+					$("#output3").html(resultStr);
+				},
+				error : function(req, status, error){
+					console.log(req, status, error);
+				}
+			});
+		}
+	</script>
+	
+	<h3>4. 응답데이터로 여러개의 객체들이 담겨있는 ArrayList받기</h3>
+	<button onclick="test4();">회원정보조회</button>
+	<table id="output4" border="1" style="text-align:center">
+		<thead>
+			<tr>
+				<th>번호</th>
+				<th>이름</th>
+				<th>아이디</th>
+				<th>주소</th>
+			</tr>
+		</thead>
+		<tbody>
+		
+		</tbody>
+	</table>
+	
+	<script>
+		function test4(){
+			$.ajax({
+				url : "<%= contextPath %>/jqAjax4.do",
+				success : function(result){
+					let str = "";
+					
+					for(let i = 0; i < result.length; i++) {
+						str += "<tr>"
+							    + "<td>"+result[i].userNo+"</td>"
+							    + "<td>"+result[i].userName+"</td>"
+							    + "<td>"+result[i]['userId']+"</td>"
+							    + "<td>"+result[i]['address']+"</td>"
+						str + "</tr>";
+					}
+					
+					$("#output4 tbody").html(str);
+				}
+			});
+		}
+	</script>
+	
+	<h2>5. ajax를 활용한 자동완성기능 구현하기</h2>
+	<select id="searchType">
+		<option value="1">글제목</option>
+		<option value="2">카테고리</option>
+		<option value="3">글내용</option>
+		<option value="4">작성자</option>
+	</select>
+	<input id='keyword' type="text" placeholder="찾을 게시글을 작성하세요">
+	<select id="list">
+	</select>
+	
+	<script>
+	$(function(){
+		$("#keyword").keyup(function(e){
+			$.ajax({
+				url : "<%= contextPath %>/jqAutoSearch.do",
+				data : {
+					keyword : $("#keyword").val(),
+					searchType : $("#searchType").val()
+					    },
+				success : function(data){
+					$("#list").html(""); // 리스트 비워주기
+					console.log(data);
+					
+					let str = "";
+					for(let i = 0; i<data.length; i++){
+						str += "<option>"
+							+ data[i].boardTitle
+							+"</option>"
+					}
+					$("#list").html(str);
+				}
+			});
+		});
+	});
+	</script>
+	
+	<h2>6. Ajax로 html파일 받아오기</h2>
+	<button id="htmlAjax">html문서 받기</button>
+	<div id="htmloutput"></div>
+	
+	<script>
+		$(function(){
+			$("#htmlAjax").click(function(){
+				$.ajax({
+					url : "<%= contextPath %>/jqHtmlTest.do",
+					type : "post",
+					dataType : "html",
+					success : function(data){
+						console.log(data);
+						$("#htmloutput").html(data);
+					}
+				});
+			});
+		});
+	</script>
+	
+	<h2>7. xml데이터 가져오기</h2>
+	<button id="xmlTest">xml데이터 가져오기</button>
+	<div id="fiction">
+		<h2>소설</h2>
+		<table id = "fiction-info">
+		</table>
+	</div>
+	<div id="it">
+		<h2>프로그래밍</h2>
+		<table id = "it-info">
+		</table>
+	</div>
+	
+	<script>
+		$(function(){
+			$("#xmlTest").click(()=>{
+				$.ajax({
+					url : "books.xml",
+					success : function(data){
+						let ficheader = "<tr><th>제목</th><th>저자</th></tr>";
+						let itheader = ficheader;
+						console.log(data);
+						
+						//let entity = $(data).find("books");
+						let entity = $(data).find(":root"); // 해당 xml파일의 시작태그를 가져올 수 있는 선택자
+						console.log(entity);
+						
+						let books = $(entity).find("book");
+						console.log(books);
+						
+						books.each(function(index, item){
+							let info = "<tr>"
+										+ "<td>"+$(item).find("title").text()+"</td>"
+										+ "<td>"+$(item).find("author").text()+"</td>"
+									 + "</tr>"
+							let subject = $(item).find("subject").text();
+							if(subject == "소설"){
+								ficheader += info;
+							}else if(subject == "프로그래밍"){
+								itheader += info;
+							}
+						});
+						
+						$("#fiction-info").html(ficheader);
+						$("#it-info").html(itheader);
+					}
+				});
+			});
+		});
+	</script>
+	
+	<h2>8. Ajax를 이용한 파일 업로드 처리하기</h2>
+	<input type="file" id="upfile" multiple>
+	<button onclick="sendFile();">파일전송</button>
+	
+	<script>
+		function sendFile(){
+			// 비동기 방식으로 파일 전송시에는 FormData라는 객체를 생성해서 파일을 추가시켜줘야 함
+			let form = new FormData();
+			//console.log($("#upfile")[0], $("#upfile")[0].files[0]);
+			//form.append("upfile", $("#upfile")[0].files[0]); 
+			$.each($("#upfile")[0].files, function(index, item){
+				console.log(index, item);
+				form.append("upfile"+index, item);
+			});
+			
+			$.ajax({
+				url : "<%= contextPath %>/fileUpload.do",
+				data : form,
+				type : "post",
+				processData : false,
+				contentType : false, // 순수한 file형태로 보내기 위해 false로 해줘야 인코딩이 안됨
+				success : function(data){
+					alert("업로드성공");
+					$("#upfile").val("");
+				}
+			}); 
 		}
 	</script>
 </body>

@@ -1,7 +1,7 @@
 package com.kh.ajaxController;
 
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.util.ArrayList;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -9,17 +9,21 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.gson.Gson;
+import com.kh.board.model.service.BoardService;
+import com.kh.board.model.vo.Board;
+
 /**
- * Servlet implementation class JsAjaxController
+ * Servlet implementation class AutoCompleteController
  */
-@WebServlet("/ajaxTest.do")
-public class JsAjaxController extends HttpServlet {
+@WebServlet("/jqAutoSearch.do")
+public class AutoCompleteController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public JsAjaxController() {
+    public AutoCompleteController() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -28,19 +32,21 @@ public class JsAjaxController extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String userId = request.getParameter("id");
-		String name = request.getParameter("name");
+		String keyword = request.getParameter("keyword"); // 민경민 -> ㅁ 미 민 민ㄱ 민겨 민경 민경ㅁ 민경미 민경민
+		String searchType = request.getParameter("searchType");
 		
-		response.setCharacterEncoding("UTF-8");
-		PrintWriter out = response.getWriter();
-		out.print("ajax요청에 대한 응답 결과 : "+userId+name);
+		// board테이블에서 검색용 목적으로 BOARD_TITLE컬럼을 사용하고, 전달값으로는 keyword를 넘겨줄 예정
+		ArrayList<Board> list = new BoardService().searchList(searchType, keyword);
+		
+		response.setContentType("application/json; charset=UTF-8");	
+		new Gson().toJson(list, response.getWriter());
 	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		request.setCharacterEncoding("UTF-8");
+		// TODO Auto-generated method stub
 		doGet(request, response);
 	}
 

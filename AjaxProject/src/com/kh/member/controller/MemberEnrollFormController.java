@@ -1,8 +1,6 @@
-package com.kh.ajaxController;
+package com.kh.member.controller;
 
 import java.io.IOException;
-import java.io.PrintWriter;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -10,16 +8,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Servlet implementation class JsAjaxController
+ * Servlet implementation class MemberEnrollFormController
  */
-@WebServlet("/ajaxTest.do")
-public class JsAjaxController extends HttpServlet {
+@WebServlet("/enrollForm.me")
+public class MemberEnrollFormController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public JsAjaxController() {
+    public MemberEnrollFormController() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -28,19 +26,16 @@ public class JsAjaxController extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String userId = request.getParameter("id");
-		String name = request.getParameter("name");
 		
-		response.setCharacterEncoding("UTF-8");
-		PrintWriter out = response.getWriter();
-		out.print("ajax요청에 대한 응답 결과 : "+userId+name);
+		// 포워딩 방식
+		request.getRequestDispatcher("views/member/memberEnrollForm.jsp").forward(request, response);
 	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		request.setCharacterEncoding("UTF-8");
+		// TODO Auto-generated method stub
 		doGet(request, response);
 	}
 
