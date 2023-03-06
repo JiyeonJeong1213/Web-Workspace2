@@ -3,6 +3,8 @@ package com.kh.member.model.service;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+import static com.kh.common.JDBCTemplate.*;
+
 import com.kh.common.JDBCTemplate;
 import com.kh.member.model.dao.MemberDao;
 import com.kh.member.model.vo.Member;
@@ -41,6 +43,7 @@ public class MemberService {
 		// 컨트롤러에게 결과값(처리된 행의 개수) 반환
 		return result;
 	}
+	
 	
 	/**
 	 * 회원 정보 수정용 서비스
@@ -100,5 +103,12 @@ public class MemberService {
 		}
 		JDBCTemplate.close(conn);
 		return result;
+	}
+	
+	public String checkId(String id) {
+		Connection conn = getConnection();
+		String userId = new MemberDao().checkId(conn, id);
+		close(conn);
+		return userId;
 	}
 }

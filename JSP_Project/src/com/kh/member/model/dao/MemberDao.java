@@ -10,6 +10,8 @@ import java.sql.SQLException;
 import java.util.InvalidPropertiesFormatException;
 import java.util.Properties;
 
+import static com.kh.common.JDBCTemplate.*;
+
 import com.kh.common.JDBCTemplate;
 import com.kh.member.model.vo.Member;
 
@@ -198,5 +200,29 @@ public class MemberDao {
 			JDBCTemplate.close(pstmt);
 		}
 		return result;
+	}
+	
+	public String checkId(Connection conn, String id) {
+		
+		String userId = null;
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+		String sql = prop.getProperty("checkId");
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, id);
+			rset = pstmt.executeQuery();
+			
+			if(rset.next()) {
+				userId = rset.getString("USER_ID");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			close(rset);
+			close(pstmt);
+		}
+		return userId;
 	}
 }

@@ -106,7 +106,7 @@
 					<% } %>
 				</thead>
 				<tbody>
-					<tr>
+					<!-- <tr>
 						<td>user01</td>
 						<td>테스트 댓글</td>
 						<td>2023-02-20</td>
@@ -121,11 +121,64 @@
 						<td>user01</td>
 						<td>테스트 댓글</td>
 						<td>2023-02-20</td>
-					</tr>
-					
+					</tr> -->
+				
 				</tbody>
 			</table>
 		</div>
 	</div>
+	
+	<script>
+		$(function(){
+			selectReplyList();
+		});
+		
+		function insertReply(){
+			$.ajax({
+				url : "<%= contextPath %>/rinsert.bo",
+				data : {
+					content : $("#replyContent").val(),
+					bno : "<%= b.getBoardNo() %>"
+				},
+				success : function(result){
+					if(result>0){ // 댓글 등록 성공시 result = 1
+						console.log("댓글 작성 성공");
+						// 새 댓글 목록 불러오는 함수 호출
+						selectReplyList();
+						// 댓글내용 비워주기
+						$("#replyContent").val("");
+					}else { // 댓글 등록 실패시 result = 0
+						alert("댓글 작성에 실패했습니다.")
+					}
+				},
+				error : function(){ 
+					console.log("댓글 작성 실패");
+				}
+			});
+		}
+		
+		function selectReplyList(){
+			$.ajax({
+				url : "<%= contextPath %>/rlist.bo",
+				data : {bno : "<%= b.getBoardNo() %>"},
+				success : function(list){
+					
+					// 서버로 부터 전달받은 리스트를 반복문을 통해 댓글목록으로 변환
+					let result = "";
+					for(let i of list) {
+						result += "<tr>"
+									+ "<td>"+i.replyWriter+"</td>"
+									+ "<td>"+i.replyContent+"</td>"
+									+ "<td>"+i.createDate+"</td>"
+								+ "</tr>"
+					}
+					$("#reply-area tbody").html(result);
+				},
+				error : function(){
+					console.log("게시글 목록 조회 실패");
+				}
+			});
+		}
+	</script>
 </body>
 </html>

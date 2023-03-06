@@ -40,7 +40,7 @@ public class JqAjaxController3 extends HttpServlet {
 		m.setAddress("서울");
 		
 		// m변수의 toString()메서드가 호출되면서 문자열이 넘어가게 됨
-		// response.getWriter()/print(m);
+		// response.getWriter().print(m);
 		
 		// {속성 : 속성값, 속성 : 속성값}
 //		JSONObject jobj = new JSONObject(); 
