@@ -1,6 +1,7 @@
 package com.kh.board.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -11,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.kh.board.model.service.BoardService;
 import com.kh.board.model.vo.Attachment;
 import com.kh.board.model.vo.Board;
+import com.kh.board.model.vo.Reply;
 
 /**
  * Servlet implementation class BoardDetailController
@@ -42,6 +44,8 @@ public class BoardDetailController extends HttpServlet {
 			request.setAttribute("b", b);
 			Attachment at = new BoardService().selectAttachment(bno);
 			request.setAttribute("at", at);
+			ArrayList<Reply> list = new BoardService().selectReplyList(bno);
+			request.setAttribute("list", list);
 			
 			request.getRequestDispatcher("views/board/boardDetailView.jsp").forward(request, response);
 		}else {

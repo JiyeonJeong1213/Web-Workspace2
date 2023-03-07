@@ -1,9 +1,10 @@
-<%@ page import="com.kh.board.model.vo.Board, com.kh.board.model.vo.Attachment" %>
+<%@ page import="com.kh.board.model.vo.*, java.util.ArrayList" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <% 
 	Board b = (Board)request.getAttribute("b"); 
 	Attachment at = (Attachment)request.getAttribute("at");
+	ArrayList<Reply> list = (ArrayList<Reply>)request.getAttribute("list");
 %>
 <!DOCTYPE html>
 <html>
@@ -106,32 +107,22 @@
 					<% } %>
 				</thead>
 				<tbody>
-					<!-- <tr>
-						<td>user01</td>
-						<td>테스트 댓글</td>
-						<td>2023-02-20</td>
-					</tr>
-					<tr>
-						<td>user01</td>
-						<td>테스트 댓글</td>
-						<td>2023-02-20</td>
-					</tr>
-					
-					<tr>
-						<td>user01</td>
-						<td>테스트 댓글</td>
-						<td>2023-02-20</td>
-					</tr> -->
-				
+					<% for(Reply r : list) { %>
+						<tr>
+							<td><%= r.getReplyWriter() %></td>
+							<td><%= r.getReplyContent() %></td>
+							<td><%= r.getCreateDate() %></td>
+						</tr>						
+					<% } %>
 				</tbody>
 			</table>
 		</div>
 	</div>
 	
 	<script>
-		$(function(){
-			selectReplyList();
-		});
+		/* $(function(){
+			setInterval(selectReplyList, 1000);
+		}); */
 		
 		function insertReply(){
 			$.ajax({
