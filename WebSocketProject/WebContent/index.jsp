@@ -21,7 +21,7 @@
 		// 웹소켓 서버에 연결하기
 		// WebSocket객체 생성하기 192.168.30.192
 		// const socket = new WebSocket("ws://ip:port/<%= request.getContextPath() %>/chatting.do")
-		const socket = new WebSocket("ws://192.168.30.192:8082/<%= request.getContextPath() %>/chatting.do");
+		const socket = new WebSocket("ws://192.168.30.192:8082/<%= request.getContextPath() %>/chatting2.do");
 		// https://ip:포트번호/~~
 		// http -> ws:~~
 		// https -> wss:~~
@@ -39,13 +39,22 @@
 			// 수신된 데이터를 받으려면 이벤트객체(e)의 data속성을 이용해야 함
 			console.log(e);
 			console.log(e.data);
+			// Object형태의 String데이터(JSONObject)를 객체로 변환해주기
+			console.log(JSON.parse(e.data));
 			
-			let msg = e.data.split(",");
+			let msg = JSON.parse(e.data);
+			if(msg["sender"] == $("#sender").val()){
+				$("#msgContainer").append($("<P>").text("<"+msg["sender"]+">"+msg["msg"]).css("text-align", "right"));
+			}else{
+				$("#msgContainer").append($("<P>").text("<"+msg["sender"]+">"+msg["msg"]).css("text-align", "left"));
+			}
+			
+			/* let msg = e.data.split(",");
 			if(msg[0]==$("#sender").val()){
 				$("#msgContainer").append($("<p>").text("<"+msg[0]+">"+msg[2]).css("text-align", "right"));
 			}else{
 				$("#msgContainer").append($("<p>").text("<"+msg[0]+">"+msg[2]).css("text-align", "left"));
-			}
+			} */
 		}
 		
 		// 3. 웹소켓 서버에 메세지를 전송하는 함수
@@ -53,8 +62,25 @@
 			// 전송할 메세지 전처리
 			// 전처리한 메세지를 전송하는 방법 : socket.send(데이터);ㅣ
 			// 발송자, 수신자, 메세지 내용 
-			socket.send($("#sender").val()+","+$("#receiver").val()+","+$("#msg").val());
+			//socket.send($("#sender").val()+","+$("#receiver").val()+","+$("#msg").val());
+			
+			/* let msg = {
+					sender : $("#sender").val(),
+					receiver : $("#receiver").val(),
+					msg : $("#msg").val()
+					}; */
+			
+			let msg = new Message($("#sender").val(), $("#receiver").val(), $("#msg").val());
+			socket.send(JSON.stringify(msg)); // msg객체를 json형태로 변경해줌
 		};
+		
+		function Message(sender, receiver, msg){
+			// this = {}
+			this.sender = sender;
+			this.receiver = receiver;
+			this.msg = msg;
+			// return this;
+		}
 	</script>
 </body>
 </html>
