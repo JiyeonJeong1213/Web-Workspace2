@@ -1,8 +1,10 @@
 <%@ page import="com.kh.member.model.vo.Member" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <% 
     String contextPath = request.getContextPath();
+	request.setAttribute("contextPath", contextPath);
 
 	Member loginUser = (Member)session.getAttribute("loginUser");
 	// 로그인 전 : null값이 담김
@@ -63,14 +65,15 @@
 </head>
 <body>
 	<script>
-		const msg = "<%= alertMsg %>";
+		<%-- const msg = "<%= alertMsg %>"; --%>
+		const msg = "${alertMsg}";
 		
-		if(msg != "null") { // "성공적으로 로그인이 되엇습니다." / "null"
+		if(msg != "") { // "성공적으로 로그인이 되엇습니다." / "null"
 			alert(msg);
 			// 알람창을 띄워준 후 session에 담긴 메세지는 지워줘야 함
 			// 안 그러면 menubar.jsp가 로딩될 때마다 매번 alert함수가 실행됨
-			<% session.removeAttribute("alertMsg"); %>
-			
+			<%-- <% session.removeAttribute("alertMsg"); %> --%>
+			<c:remove var="alertMsg"/>
 		}
 	</script>
 
@@ -104,7 +107,7 @@
 					// 웹애플리케이션의 디렉토리 구조가 url에 노출되면 보안에 취약
 					
 					// 단순한 정적인 페이지 이동요청이라고 해도 반드시 servlet을 거쳐갈 것 => url에 서블릿 매핑값만 노출되도록 하기
-					location.href="<%= contextPath %>/enrollForm.me";
+					location.href= "${contextPath}/enrollForm.me";
 					// location.href=""; 도 a태그와 같아서 GET방식
 				}
 				
@@ -143,10 +146,10 @@
 		<% }else { %>
 			<!-- 로그인 성공 후 -->
 			<div id="user-info">
-				<b><%= loginUser.getUserName() %></b>님 환영합니다.
+				<b>${loginUser.userName }</b>님 환영합니다.
 				<div align="center">
-					<a href="<%= contextPath %>/myPage.me">마이페이지</a>
-					<a href="<%= contextPath %>/logout.me">로그아웃</a> <!-- a태그는 무조건 GET방식으로 요청 -->
+					<a href="${contextPath }/myPage.me">마이페이지</a>
+					<a href="${contextPath }/logout.me">로그아웃</a> <!-- a태그는 무조건 GET방식으로 요청 -->
 				</div>
 			</div>
 		<% } %>
@@ -156,10 +159,10 @@
 	<br>
 	
 	<div class="nav-area" align="center">
-		<div class="menu"><a href="<%= contextPath%>">HOME</a></div>
-		<div class="menu"><a href="<%= contextPath%>/list.no">공지사항</a></div>
-		<div class="menu"><a href="<%= contextPath%>/list.bo?currentPage=1">일반게시판</a></div>
-		<div class="menu"><a href="<%= contextPath%>/list.th">사진게시판</a></div>
+		<div class="menu"><a href="${contextPath }">HOME</a></div>
+		<div class="menu"><a href="${contextPath }/list.no">공지사항</a></div>
+		<div class="menu"><a href="${contextPath }/list.bo?currentPage=1">일반게시판</a></div>
+		<div class="menu"><a href="${contextPath }/list.th">사진게시판</a></div>
 	</div>
 </body>
 </html>

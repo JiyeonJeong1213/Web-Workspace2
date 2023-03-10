@@ -16,7 +16,7 @@
 	<div class="outer">
 		<br>
 		<h2 align="center">회원가입</h2>
-		<form id="enroll-form" action="<%= contextPath %>/insert.me" method="post">
+		<form id="enroll-form" action="${contextPath }/insert.me" method="post">
 		  <!-- 아이디, 비밀번호, 이름, 전화번호, 이메일, 주소, 취미 -->
             <table>
                 <!-- (tr>td*3)*8 -->
@@ -97,7 +97,7 @@
 			const $userId = $("#enroll-form input[name='userId']");
 			// 비동기 요청 보내기
 			$.ajax({
-				url : "<%= contextPath %>/idCheck.me",
+				url : "${contextPath }/idCheck.me",
 				data : {id : $userId.val()},
 				success : function(result) {
 					if(result == "NNNNN"){
